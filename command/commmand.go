@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"github.com/masci/flick-rsync/flickr"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 )
@@ -43,4 +44,12 @@ func Main() {
 	}
 	fmt.Println("Would sync", *src, *dest)
 	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
+
+	// get flickr client
+	client := flickr.NewFlickrClient(*api_key, *api_secret)
+
+	tok, err := flickr.GetRequestToken(client)
+	fmt.Println(tok)
+	url, _ := flickr.GetAuthorizeUrl(client, tok)
+	fmt.Println(url)
 }
