@@ -3,6 +3,7 @@ package command
 import (
 	"fmt"
 	"github.com/masci/flick-rsync/flickr"
+	"github.com/masci/flick-rsync/flickr/test"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 )
@@ -48,28 +49,42 @@ func Main() {
 	// get flickr client
 	client := flickr.NewFlickrClient(*api_key, *api_secret)
 
-	// get request token
-	tok, err := flickr.GetRequestToken(client)
-	if err != nil {
+	var accessTok *flickr.OAuthToken
+
+	if config.OAuthToken == "" {
+		// get request token
+		tok, err := flickr.GetRequestToken(client)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(2)
+		}
+
+		// get access token
+		url, _ := flickr.GetAuthorizeUrl(client, tok)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(3)
+		}
+
+		// tell user to authorize the app
+		var oauthVerifier string
+		fmt.Println("Open your browser at this url:", url)
+		fmt.Print("Then, insert the code:")
+		fmt.Scanln(&oauthVerifier)
+
+		// get the access token
+		accessTok, err = flickr.GetAccessToken(client, tok, oauthVerifier)
+		fmt.Println(accessTok)
 		fmt.Println(err)
-		os.Exit(2)
+	} else {
+		accessTok = &flickr.OAuthToken{
+			OAuthToken:       config.OAuthToken,
+			OAuthTokenSecret: config.OAuthTokenSecret,
+		}
 	}
 
-	// get access token
-	url, _ := flickr.GetAuthorizeUrl(client, tok)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(3)
-	}
-
-	// tell user to authorize the app
-	var oauthVerifier string
-	fmt.Println("Open your browser at this url:", url)
-	fmt.Print("Then, insert the code:")
-	fmt.Scanln(&oauthVerifier)
-
-	// get the access token
-	accessTok, err := flickr.GetAccessToken(client, tok, oauthVerifier)
-	fmt.Println(accessTok)
+	// test
+	resp, err := test.Login(client, accessTok)
+	fmt.Println(resp.Status, resp.User)
 	fmt.Println(err)
 }
