@@ -13,8 +13,10 @@ const (
 
 type ConfigFile struct {
 	// preserve the same naming of the command line flags inside the config file
-	ApiKey    string `json:"api_key"`
-	ApiSecret string `json:"api_secret"`
+	ApiKey           string `json:"api_key"`
+	ApiSecret        string `json:"api_secret"`
+	OAuthToken       string `json:"oauth_token"`
+	OAuthTokenSecret string `json:"oauth_token_secret"`
 }
 
 // compute the absolute path of the configuration file
@@ -30,7 +32,7 @@ func getConfigFilePath() string {
 
 // search for a .flick-rsync.cfg file in user's home directory
 // if present, unmarshal file contents and return a ConfigFile instance
-func parseConfigFile(filePath string) (*ConfigFile, error) {
+func loadConfigFile(filePath string) (*ConfigFile, error) {
 	config := ConfigFile{}
 
 	cfg_file, err := os.Open(filePath)

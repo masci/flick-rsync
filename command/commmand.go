@@ -19,7 +19,7 @@ func Main() {
 	kingpin.Version("0.0.1")
 
 	// read configuration in priority order, first the config file
-	config, err := parseConfigFile(getConfigFilePath())
+	config, err := loadConfigFile(getConfigFilePath())
 	if err == nil {
 		*api_key = config.ApiKey
 		*api_secret = config.ApiSecret

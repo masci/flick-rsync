@@ -25,11 +25,13 @@ func TestGetConfigFilePath(t *testing.T) {
 	}
 }
 
-func TestParseConfigFile(t *testing.T) {
+func TestLoadConfigFile(t *testing.T) {
 	jsonData := `
 {
 	"api_key":"foo",
-	"api_secret":"bar"
+	"api_secret":"bar",
+	"oauth2_token":"baz",
+	"oauth2_token_secret":"sssst!"
 }`
 
 	bogusJsonData := `
@@ -47,7 +49,7 @@ func TestParseConfigFile(t *testing.T) {
 		t.Error("Unable to write test data to file", file.Name())
 	}
 
-	out, err := parseConfigFile(file.Name())
+	out, err := loadConfigFile(file.Name())
 	if err != nil {
 		t.Error("Unable to parse config file", file.Name())
 	}
@@ -56,7 +58,7 @@ func TestParseConfigFile(t *testing.T) {
 		t.Error("Error parsing config file, expected foo bar, found", out.ApiKey, out.ApiSecret)
 	}
 
-	out, err = parseConfigFile("")
+	out, err = loadConfigFile("")
 	if err == nil {
 		t.Error("Invoking with empty param should return an error")
 	}
@@ -75,7 +77,7 @@ func TestParseConfigFile(t *testing.T) {
 		t.Error("Unable to write test data to file", file.Name())
 	}
 
-	out, err = parseConfigFile(file.Name())
+	out, err = loadConfigFile(file.Name())
 	if err == nil {
 		t.Error("Should not parse bogus config file", file.Name())
 	}
