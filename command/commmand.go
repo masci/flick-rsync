@@ -51,7 +51,7 @@ func Main() {
 
 	var accessTok *flickr.OAuthToken
 
-	if config.OAuthToken == "" {
+	if config.OAuthToken == "" || config.OAuthTokenSecret == "" {
 		// get request token
 		tok, err := flickr.GetRequestToken(client)
 		if err != nil {
@@ -74,17 +74,15 @@ func Main() {
 
 		// get the access token
 		accessTok, err = flickr.GetAccessToken(client, tok, oauthVerifier)
-		fmt.Println(accessTok)
-		fmt.Println(err)
+		client.OAuthToken = accessTok.OAuthToken
+		client.OAuthTokenSecret = accessTok.OAuthTokenSecret
 	} else {
-		accessTok = &flickr.OAuthToken{
-			OAuthToken:       config.OAuthToken,
-			OAuthTokenSecret: config.OAuthTokenSecret,
-		}
+		client.OAuthToken = config.OAuthToken
+		client.OAuthTokenSecret = config.OAuthTokenSecret
 	}
 
 	// test
-	resp, err := test.Login(client, accessTok)
+	resp, err := test.Login(client)
 	fmt.Println(resp.Status, resp.User)
 	fmt.Println(err)
 }
