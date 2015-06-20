@@ -48,8 +48,28 @@ func Main() {
 	// get flickr client
 	client := flickr.NewFlickrClient(*api_key, *api_secret)
 
+	// get request token
 	tok, err := flickr.GetRequestToken(client)
-	fmt.Println(tok)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+
+	// get access token
 	url, _ := flickr.GetAuthorizeUrl(client, tok)
-	fmt.Println(url)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(3)
+	}
+
+	// tell user to authorize the app
+	var oauthVerifier string
+	fmt.Println("Open your browser at this url:", url)
+	fmt.Print("Then, insert the code:")
+	fmt.Scanln(&oauthVerifier)
+
+	// get the access token
+	accessTok, err := flickr.GetAccessToken(client, tok, oauthVerifier)
+	fmt.Println(accessTok)
+	fmt.Println(err)
 }
