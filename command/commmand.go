@@ -2,8 +2,8 @@ package command
 
 import (
 	"fmt"
-	"github.com/masci/flick-rsync/flickr"
-	"github.com/masci/flick-rsync/flickr/test"
+	"github.com/masci/flickr.go/flickr"
+	"github.com/masci/flickr.go/flickr/test"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 )
