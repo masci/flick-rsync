@@ -2,22 +2,25 @@ package command
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 )
 
-var validPath *regexp.Regexp
+var re *regexp.Regexp
 
 func init() {
-	validPath = regexp.MustCompile(`https://www.flickr.com/photos/\w+(/sets/\d+)?`)
+	re = regexp.MustCompile(`(?P<name>\w+)@flickr:(/)?(?P<set>\d+)?`)
 }
 
 func ParseFilckrPath(path string) (string, string, error) {
-	match := validPath.FindStringSubmatch(path)
-	if len(match) == 2 {
-		return match[0], match[1], nil
-	} else if len(match) == 1 {
-		return match[0], "", nil
+	match := re.FindStringSubmatch(path)
+
+	fmt.Println(match)
+	if len(match) == 4 {
+		return match[1], match[3], nil
+	} else if len(match) > 1 {
+		return match[1], "", nil
 	}
 
-	return "", "", errors.New(path, ": not a valid Flickr path.")
+	return "", "", errors.New(fmt.Sprintf("Not a valid Flickr path: %s", path))
 }
