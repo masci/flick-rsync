@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/masci/flickr.go/flickr"
+	"github.com/masci/flickr.go/flickr/test"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -51,7 +52,12 @@ func Main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("About to sync", *src, *dest)
+	// default destination path if not provided
+	if *dest == "" {
+		*dest = "."
+	}
+
+	fmt.Println("About to sync Flickr set", set, "owned by", user, "with", *dest)
 	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
 
 	// get flickr client
