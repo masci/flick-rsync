@@ -2,10 +2,10 @@ package command
 
 import (
 	"fmt"
-	"github.com/masci/flickr.go/flickr"
-	"github.com/masci/flickr.go/flickr/test"
-	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
+
+	"github.com/masci/flickr.go/flickr"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 func Main() {
@@ -43,7 +43,15 @@ func Main() {
 		fmt.Println("Flickr API keys not found, exiting...")
 		os.Exit(1)
 	}
-	fmt.Println("Would sync", *src, *dest)
+
+	// give up if SRC is not a valid Flickr path
+	user, set, err := ParseFilckrPath(*src)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println("About to sync", *src, *dest)
 	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
 
 	// get flickr client
