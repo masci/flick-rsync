@@ -24,4 +24,5 @@ _testmain.go
 flick-rsync
 *.swp
 coverage.out
+profile.cov
 .DS_Store
