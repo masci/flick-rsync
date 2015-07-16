@@ -19,5 +19,5 @@ func ParseFilckrPath(path string) (string, string, error) {
 		return match[0], "", nil
 	}
 
-	return "", "", errors.New("Not a valid Flickr path")
+	return "", "", errors.New(path, ": not a valid Flickr path.")
 }
