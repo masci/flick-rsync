@@ -11,6 +11,7 @@ func TestParseFilckrPath(t *testing.T) {
 		_, _, err := ParseFilckrPath(path)
 		return err == nil
 	}
+
 	Expect(t, check("/path/to/somewhere"), false)
 	Expect(t, check("masci@flickr:/123456"), true)
 	Expect(t, check("masci@flickr:/"), true)
@@ -20,7 +21,13 @@ func TestParseFilckrPath(t *testing.T) {
 	user, set, _ := ParseFilckrPath("masci@flickr:/123456")
 	Expect(t, user, "masci")
 	Expect(t, set, "123456")
+
 	user, set, _ = ParseFilckrPath("masci@flickr:")
 	Expect(t, user, "masci")
 	Expect(t, set, "")
+
+	user, set, _ = ParseFilckrPath("masci@flickr:/")
+	Expect(t, user, "masci")
+	Expect(t, set, "")
+
 }
