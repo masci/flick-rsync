@@ -9,13 +9,12 @@ import (
 var re *regexp.Regexp
 
 func init() {
-	re = regexp.MustCompile(`(?P<name>\w+)@flickr:(/)?(?P<set>\d+)?`)
+	re = regexp.MustCompile(`(\w+)@flickr:(/)?(\d+)?`)
 }
 
 func ParseFilckrPath(path string) (string, string, error) {
 	match := re.FindStringSubmatch(path)
 
-	fmt.Println(match)
 	if len(match) == 4 {
 		return match[1], match[3], nil
 	} else if len(match) > 1 {
