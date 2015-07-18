@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/masci/flickr.go/flickr"
-	"github.com/masci/flickr.go/flickr/test"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -96,7 +95,7 @@ func Main() {
 	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
 
 	// test
-	resp, err := test.Login(client)
-	fmt.Println(resp.Status, resp.User)
-	fmt.Println(err)
+	//resp, err := test.Login(client)
+	//fmt.Println(resp.Status, resp.User)
+	//fmt.Println(err)
 }
