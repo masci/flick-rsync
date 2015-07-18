@@ -29,5 +29,4 @@ func TestParseFilckrPath(t *testing.T) {
 	user, set, _ = ParseFilckrPath("masci@flickr:/")
 	Expect(t, user, "masci")
 	Expect(t, set, "")
-
 }

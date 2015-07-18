@@ -57,9 +57,6 @@ func Main() {
 		*dest = "."
 	}
 
-	fmt.Println("About to sync Flickr set", set, "owned by", user, "with", *dest)
-	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
-
 	// get flickr client
 	client := flickr.NewFlickrClient(*api_key, *api_secret)
 
@@ -94,6 +91,9 @@ func Main() {
 		client.OAuthToken = config.OAuthToken
 		client.OAuthTokenSecret = config.OAuthTokenSecret
 	}
+
+	fmt.Println("About to sync Flickr set", set, "owned by", user, "with", *dest)
+	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
 
 	// test
 	resp, err := test.Login(client)
