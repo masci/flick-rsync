@@ -4,16 +4,21 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/masci/flick-rsync/sync"
 	"github.com/masci/flickr.go/flickr"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 func Main() {
 	var (
+		// kingping stuff
 		src        = kingpin.Arg("SRC", "Flickr SET to sync").Required().String()
 		dest       = kingpin.Arg("DEST", "Destination path").String()
 		api_key    = kingpin.Flag("api_key", "Flickr API key").String()
 		api_secret = kingpin.Flag("api_secret", "Flickr API secret").String()
+
+		// others
+		accessTok *flickr.OAuthToken
 	)
 
 	kingpin.CommandLine.Help = "A Flickr syncing tool"
@@ -44,22 +49,8 @@ func Main() {
 		os.Exit(1)
 	}
 
-	// give up if SRC is not a valid Flickr path
-	user, set, err := ParseFilckrPath(*src)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	// default destination path if not provided
-	if *dest == "" {
-		*dest = "."
-	}
-
 	// get flickr client
 	client := flickr.NewFlickrClient(*api_key, *api_secret)
-
-	var accessTok *flickr.OAuthToken
 
 	if config.OAuthToken == "" || config.OAuthTokenSecret == "" {
 		// get request token
@@ -91,11 +82,12 @@ func Main() {
 		client.OAuthTokenSecret = config.OAuthTokenSecret
 	}
 
-	fmt.Println("About to sync Flickr set", set, "owned by", user, "with", *dest)
-	fmt.Println("Apikey:", *api_key, "Apisec:", *api_secret)
+	// give up if SRC is not a valid Flickr path
+	_, set, err := ParseFilckrPath(*src)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
-	// test
-	//resp, err := test.Login(client)
-	//fmt.Println(resp.Status, resp.User)
-	//fmt.Println(err)
+	sync.SyncRemote(client, set, *dest)
 }
