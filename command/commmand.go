@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/masci/flick-rsync/sync"
-	"github.com/masci/flickr.go/flickr"
+	"github.com/masci/flickr"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 

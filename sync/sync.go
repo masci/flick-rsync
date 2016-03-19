@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/masci/flickr.go/flickr"
+	"github.com/masci/flickr"
 )
 
 func SyncRemote(client *flickr.FlickrClient, setId string, destPath string) {
